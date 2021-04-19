@@ -1,9 +1,9 @@
-﻿<Window x:Class="ForguncyAutoTestTools.MainWindow"
+﻿<Window x:Class="ForguncyTools.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ForguncyAutoTestTools"
+        xmlns:local="clr-namespace:ForguncyTools"
         mc:Ignorable="d"
         Title="Forguncy Tools" Height="450" Width="800">
     <Window.Resources>
@@ -41,6 +41,7 @@
                             <Button Content="Open" Margin="4" Click="CollaborationOpen_Click"></Button>
                             <Button Content="ZipBack" Margin="4" Click="CollaborationZipBack_Click"></Button>
                             <Button Content="InitBare" Margin="4" Click="CollaborationInitBare_Click"></Button>
+                            <Button Content="ClearLocalRepo" Margin="4" Click="CollaborationClearLocalRepo_Click"></Button>
                         </StackPanel>
 
                         <TextBox Grid.Row="0" Grid.Column="1" Margin="4" Text="{Binding ZipFilePath}"></TextBox>

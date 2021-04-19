@@ -20,7 +20,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Path = System.IO.Path;
 
-namespace ForguncyAutoTestTools
+namespace ForguncyTools
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -31,7 +31,15 @@ namespace ForguncyAutoTestTools
         {
             InitializeComponent();
 
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
             CollaborationTab.DataContext = new CollaborationViewModel();
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            var exception = e.ExceptionObject as Exception;
+            MessageBox.Show(exception.Message, "Forguncy Tools", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         public CollaborationViewModel CollaborationViewModel => CollaborationTab.DataContext as CollaborationViewModel;
@@ -49,6 +57,11 @@ namespace ForguncyAutoTestTools
         private void CollaborationInitBare_Click(object sender, RoutedEventArgs e)
         {
             CollaborationViewModel.InitBare();
+        }
+
+        private void CollaborationClearLocalRepo_Click(object sender, RoutedEventArgs e)
+        {
+            CollaborationViewModel.ClearLocalRepo();
         }
     }
 
@@ -103,20 +116,20 @@ namespace ForguncyAutoTestTools
 
         public void Open()
         {
-            EnsureFolderClean();
+            EnsureFolderClean(ConfigurationManager.DefaultTempFolder);
 
             ZipFile.ExtractToDirectory(ZipFullPath, ConfigurationManager.DefaultTempFolder);
         }
 
-        private void EnsureFolderClean()
+        private void EnsureFolderClean(string folder)
         {
-            Directory.Delete(ConfigurationManager.DefaultTempFolder, true);
-            Directory.CreateDirectory(ConfigurationManager.DefaultTempFolder);
+            Directory.Delete(folder, true);
+            Directory.CreateDirectory(folder);
         }
 
         public void InitBare()
         {
-            EnsureFolderClean();
+            EnsureFolderClean(ConfigurationManager.DefaultTempFolder);
 
             Repository.Init(TempFolder, true);
         }
@@ -124,6 +137,12 @@ namespace ForguncyAutoTestTools
         public void ZipBack()
         {
             ZipFile.CreateFromDirectory(TempFolder, ZipFullPath);
+        }
+
+        public void ClearLocalRepo()
+        {
+            var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ForguncyCollaboration", Path.GetFileName(TempFolder));
+            Directory.Delete(folder, true);
         }
     }
 
